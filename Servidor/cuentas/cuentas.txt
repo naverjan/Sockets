@@ -1,6 +1,6 @@
-Cuenta:3456
+Cuenta:12345
 Valor:500
 
-Cuenta:12345
-Valor:600
+Cuenta:56789
+Valor:700
 

@@ -22,7 +22,7 @@ public class Servidor extends Thread {
     private int puerto; // Número de puerto de escucha para la conexión de clientes
     private DataInputStream canalEntradaDatos; //Canal de entrada de datos de clientes
     private DataOutputStream canalSalidaDatos;
-    private String pathFile =  "cuentas/cuentas.txt";
+    private String pathFile =  "cuentas/cuentas.txt";//Archivo de cuentas
     private int cuenta = 0;
     private int valor = 0;
 
@@ -67,25 +67,24 @@ public class Servidor extends Thread {
                 try {
                 	cuenta = Integer.parseInt(datos[0]);
                 	valor = Integer.parseInt(datos[1]);
+                	
+                	//Guardamos la cuenta
+                    File file = new File(pathFile);
+                    if(!file.exists()) {
+                    	file.createNewFile();
+                    }
+                    FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    bw.write("Cuenta:"+ Integer.toString(cuenta)+"\n");
+                    bw.write("Valor:"+ Integer.toString(valor)+"\n\n");
+                    bw.close();
+                    System.out.println("Cuenta guardada");
+                    canalSalidaDatos.writeUTF("OK");
 				} catch (Exception e) {		
 					//Mesaje de error
 					canalSalidaDatos.writeUTF("NO-OK");
-					System.out.println("Fomato incorrrecto");
-					System.exit(2);
-				}
-                                               
-                //Guardamos la cuenta
-                File file = new File(pathFile);
-                if(!file.exists()) {
-                	file.createNewFile();
-                }
-                FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
-                BufferedWriter bw = new BufferedWriter(fw);
-                bw.write("Cuenta:"+ Integer.toString(cuenta)+"\n");
-                bw.write("Valor:"+ Integer.toString(valor)+"\n\n");
-                bw.close();
-                System.out.println("Cuenta guardada");
-                canalSalidaDatos.writeUTF("OK");
+					System.out.println("Fomato incorrrecto");					
+				}                                                              
             }
         } catch (IOException e) {
             System.out.println(FechaActual() + " Error al abrir puerto " + puerto +
